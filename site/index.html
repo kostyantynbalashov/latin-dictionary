@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Латинський словник</title>
+  <meta name="description" content="Латинсько-українсько-англійський словник медичної термінології">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#view">До результатів</a>
+
+  <header class="masthead">
+    <div class="wrap">
+      <p class="brand">Латинський словник</p>
+      <p class="sub">Медична термінологія, тестова версія</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <nav class="modes" id="modes" aria-label="Напрям словника"></nav>
+
+    <form class="search" role="search" id="searchform">
+      <label class="sr" for="q">Пошук за початком слова</label>
+      <input id="q" type="search" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+    </form>
+
+    <div class="filters" id="filters"></div>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+    <div id="view"></div>
+  </main>
+
+  <footer class="wrap foot">
+    <p id="foot"></p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

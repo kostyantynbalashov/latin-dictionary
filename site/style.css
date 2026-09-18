@@ -1,0 +1,123 @@
+/* Шрифти: лежать у site/fonts, зовнішніх запитів немає */
+@font-face{font-family:"Spectral";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/spectral-cyrillic-400-normal.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Spectral";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/spectral-latin-ext-400-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Spectral";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/spectral-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Spectral";font-style:italic;font-weight:400;font-display:swap;src:url(fonts/spectral-cyrillic-400-italic.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Spectral";font-style:italic;font-weight:400;font-display:swap;src:url(fonts/spectral-latin-ext-400-italic.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Spectral";font-style:italic;font-weight:400;font-display:swap;src:url(fonts/spectral-latin-400-italic.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Spectral";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/spectral-cyrillic-600-normal.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Spectral";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/spectral-latin-ext-600-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Spectral";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/spectral-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ibm-plex-sans-cyrillic-400-normal.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ibm-plex-sans-latin-ext-400-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ibm-plex-sans-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/ibm-plex-sans-cyrillic-500-normal.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/ibm-plex-sans-latin-ext-500-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/ibm-plex-sans-latin-500-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+:root{
+  --paper:#EFF2F1;
+  --wash:#E1E7E7;
+  --ink:#16222C;
+  --muted:#586672;
+  --rule:#CFD6D8;
+  --rubric:#9B2335;
+  --serif:"Spectral",Georgia,"Times New Roman",serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:1rem;line-height:1.5}
+.wrap{max-width:62rem;margin-inline:auto;padding-inline:1.25rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:-999px;top:0;background:var(--ink);color:#fff;padding:.5rem .75rem}
+.skip:focus{left:0;z-index:5}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--rubric);outline-offset:2px}
+
+/* Шапка */
+.masthead{padding:1.25rem 0 0}
+.brand{margin:0;font-family:var(--serif);font-weight:600;font-size:1.25rem;letter-spacing:.005em}
+.sub{margin:.1rem 0 0;color:var(--muted);font-size:.875rem}
+
+/* Напрями */
+.modes{display:flex;flex-wrap:wrap;gap:.25rem 1.5rem;margin-top:1.5rem;border-bottom:1px solid var(--rule)}
+.modes a{display:block;padding:.6rem 0 .55rem;text-decoration:none;color:var(--muted);font-weight:500;font-size:.95rem;border-bottom:3px solid transparent;margin-bottom:-1px}
+.modes a:hover{color:var(--ink)}
+.modes a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--rubric)}
+
+/* Пошук */
+.search{margin:1.75rem 0 .5rem}
+.search input{width:100%;padding:.15em 0 .2em;border:0;border-bottom:2px solid var(--ink);border-radius:0;background:transparent;color:var(--ink);
+  font-family:var(--serif);font-size:clamp(1.9rem,4.4vw + .8rem,3.1rem);line-height:1.15;caret-color:var(--rubric);-webkit-appearance:none;appearance:none}
+.search input::placeholder{color:#8593A0;opacity:1}
+.search input:focus{outline:none;border-bottom-color:var(--rubric)}
+.search input:focus-visible{outline:none}
+.search input::-webkit-search-cancel-button{-webkit-appearance:none}
+
+/* Фільтр за типом */
+.filters{display:flex;flex-wrap:wrap;gap:.35rem .5rem;margin:.9rem 0 0;min-height:0}
+.filters button{font:inherit;font-size:.875rem;padding:.2rem .7rem;border:1px solid var(--rule);border-radius:99px;background:transparent;color:var(--muted);cursor:pointer}
+.filters button:hover{border-color:var(--muted);color:var(--ink)}
+.filters button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.status{margin:.9rem 0 0;color:var(--muted);font-size:.875rem;min-height:1.3em}
+
+/* Результати: латинські гасла */
+.list{list-style:none;margin:.25rem 0 0;padding:0}
+.list li{border-bottom:1px solid var(--rule)}
+.row{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1.6fr) 7.5rem;gap:.15rem 1.5rem;align-items:baseline;padding:.75rem .5rem;text-decoration:none}
+.row:hover{background:var(--wash)}
+.lem{font-family:var(--serif);font-weight:600;font-size:1.3rem;line-height:1.25;overflow-wrap:anywhere}
+.gram{font-family:var(--serif);font-style:italic;color:var(--muted);font-size:1.05rem;margin-left:.4em}
+.tr{color:var(--ink);overflow-wrap:anywhere}
+.ty{color:var(--muted);font-size:.85rem;white-space:nowrap;justify-self:end}
+.subhead{margin:1.75rem 0 .25rem;color:var(--muted);font-size:.9rem;font-weight:500}
+
+/* Результати: зворотний пошук */
+.rrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:.2rem 1.5rem;align-items:baseline;padding:.75rem .5rem}
+.key{font-size:1.1rem;overflow-wrap:anywhere}
+.lats{display:flex;flex-wrap:wrap;gap:.15rem 1.1rem}
+.lats a{text-decoration:none;border-bottom:1px solid var(--rule)}
+.lats a:hover{border-bottom-color:var(--rubric)}
+.lats .lem{font-size:1.25rem}
+
+/* Головна: літери */
+.hint{margin:1.25rem 0 0;color:var(--muted);max-width:40rem}
+.abc{display:flex;flex-wrap:wrap;gap:.25rem;margin:1.5rem 0 0;padding:0;list-style:none}
+.abc a{display:grid;place-items:center;min-width:2.5rem;height:2.5rem;font-family:var(--serif);font-size:1.25rem;text-decoration:none;border:1px solid var(--rule);text-transform:uppercase}
+.abc a:hover{border-color:var(--rubric);color:var(--rubric)}
+.empty{max-width:40rem;margin:2rem 0}
+.empty p{margin:.4rem 0}
+.empty strong{font-weight:500}
+
+/* Сторінка слова */
+.entry{padding:1.5rem 0 3rem}
+.back{display:inline-block;color:var(--muted);text-decoration:none;font-size:.9rem;margin-bottom:1.25rem}
+.back:hover{color:var(--rubric);text-decoration:underline}
+.entry h1{margin:0;font-family:var(--serif);font-weight:600;font-size:clamp(2.6rem,8vw,4.75rem);line-height:1.05;overflow-wrap:anywhere}
+.entry h1::first-letter{color:var(--rubric)}
+.entry .egram{margin:.35rem 0 0;font-family:var(--serif);font-style:italic;font-size:1.5rem;color:var(--muted)}
+.entry .etype{margin:.5rem 0 0;color:var(--muted);font-size:.9rem}
+.entry section{margin-top:2.25rem}
+.entry h2{margin:0 0 .6rem;font-size:.9rem;font-weight:500;color:var(--muted)}
+.trs{display:flex;flex-wrap:wrap;gap:.2rem 1.5rem;margin:0;padding:0;list-style:none}
+.trs a{font-family:var(--serif);font-size:1.6rem;line-height:1.3;text-decoration:underline;text-decoration-color:var(--rule);text-decoration-thickness:2px;text-underline-offset:.2em}
+.trs a:hover{text-decoration-color:var(--rubric)}
+.note{margin:0;max-width:40rem}
+.exs{list-style:none;margin:0;padding:0;max-width:44rem}
+.exs li{padding:.7rem 0;border-bottom:1px solid var(--rule)}
+.exs .t{font-family:var(--serif);font-style:italic;font-size:1.2rem;line-height:1.4}
+.exs .s{display:block;margin-top:.15rem;color:var(--muted);font-size:.875rem}
+
+.foot{padding-top:1.5rem;padding-bottom:2.5rem;color:var(--muted);font-size:.8rem}
+.foot p{margin:0;border-top:1px solid var(--rule);padding-top:1rem}
+
+@media (max-width:640px){
+  .row{grid-template-columns:1fr;gap:.05rem}
+  .row .ty{order:3}
+  .rrow{grid-template-columns:1fr}
+  .modes{gap:.1rem .85rem}
+  .modes a{font-size:.85rem}
+  .row .ty{justify-self:start}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
