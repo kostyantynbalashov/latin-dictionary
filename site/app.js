@@ -52,14 +52,19 @@
     .sort((a, b) => collEn.compare(a.sk, b.sk) || collEn.compare(a.e.g, b.e.g));
 
   /* ---------- зворотні індекси ---------- */
+  // у зворотному напрямі переклад синоніма вважається й перекладом гасла (лише синоніми, не антоніми)
+  const BY_SLUG0 = new Map(LAT.map((x) => [x.e.s, x]));
   function buildRev(field, norm, coll) {
     const m = new Map();
-    for (const x of LAT) for (const t of x.e[field]) {
-      const main = plain(t), k = norm(main);
-      if (!k) continue;
-      let r = m.get(k);
-      if (!r) { r = { k, label: main, ents: [] }; m.set(k, r); }
-      if (!r.ents.includes(x)) r.ents.push(x);
+    for (const x of LAT) {
+      const group = [x, ...(x.e.sy || []).map((s) => BY_SLUG0.get(s.s)).filter(Boolean)];
+      for (const g of group) for (const t of g.e[field]) {
+        const main = plain(t), k = norm(main);
+        if (!k) continue;
+        let r = m.get(k);
+        if (!r) { r = { k, label: main, ents: [] }; m.set(k, r); }
+        if (!r.ents.includes(x)) r.ents.push(x);
+      }
     }
     return [...m.values()].sort((a, b) => coll.compare(a.k, b.k));
   }
