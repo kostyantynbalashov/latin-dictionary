@@ -29,6 +29,8 @@ HEADERS = {
     "українська": "uk",
     "примітка": "note",
     "приклади": "ex",
+    "синоніми": "syn",
+    "антоніми": "ant",
 }
 
 # Кириличні літери, візуально ідентичні латинським (типова помилка при наборі)
@@ -162,6 +164,62 @@ def classify(lemma, gram):
     return "інше"
 
 
+def parse_links(cell):
+    """'pulsus parvus; os, ossis, n.' -> ['pulsus parvus', 'os, ossis, n.']"""
+    return [fix_latin(x.strip()) for x in split_top(clean_ws(cell), ";") if x.strip()]
+
+
+def norm_key(s):
+    return re.sub(r"\s+", " ", s.lower()).strip()
+
+
+def resolve_links(entries, warnings):
+    """Зіставляє посилання з гаслами: за повною лемою або лема + граматика.
+    Зв'язки НЕ дзеркалюються автоматично; висячі, неоднозначні й односторонні — у звіті."""
+    by_lemma, by_full = {}, {}
+    for e in entries:
+        by_lemma.setdefault(norm_key(e["l"]), []).append(e)
+        by_full[norm_key(f"{e['l']}, {e['g']}" if e["g"] else e["l"])] = e
+
+    def lookup(e, raw, label):
+        k = norm_key(raw)
+        target = by_full.get(k)
+        if target is None:
+            cands = by_lemma.get(k, [])
+            if len(cands) == 1:
+                target = cands[0]
+            elif len(cands) > 1:
+                hint = "; ".join(f"«{c['l']}, {c['g']}»" for c in cands)
+                warnings.append(f"«{e['l']}»: {label} «{raw}» неоднозначний — вкажіть граматику: {hint}")
+                return None
+        if target is None:
+            warnings.append(f"«{e['l']}»: {label} «{raw}» — такого гасла немає (висяче посилання)")
+        elif target is e:
+            warnings.append(f"«{e['l']}»: {label} посилається сам на себе")
+            return None
+        return target
+
+    for src, dst, label in (("_sy", "sy", "синонім"), ("_an", "an", "антонім")):
+        targets = {}
+        for e in entries:
+            out, tg = [], []
+            for raw in e[src]:
+                t = lookup(e, raw, label)
+                if t is not None:
+                    out.append({"l": t["l"], "g": t["g"], "s": t["s"]})
+                    tg.append(t)
+                elif warnings and "висяче посилання" in warnings[-1] and f"«{raw}»" in warnings[-1]:
+                    out.append({"l": raw, "g": "", "s": ""})  # показуємо текстом без посилання
+            e[dst] = out
+            targets[id(e)] = tg
+        for e in entries:
+            for t in targets[id(e)]:
+                if e not in targets[id(t)]:
+                    warnings.append(f"односторонній {label}: «{e['l']}» → «{t['l']}» (зворотного зв'язку немає)")
+    for e in entries:
+        e.pop("_sy", None); e.pop("_an", None)
+
+
 # ---------------------------------------------------------------- збірка
 
 def read_rows():
@@ -211,6 +269,7 @@ def build():
         ent = {
             "l": lemma, "g": gram, "t": typ, "u": uk, "e": en,
             "n": clean_ws(rec.get("note")), "x": parse_examples(rec.get("ex")),
+            "_sy": parse_links(rec.get("syn")), "_an": parse_links(rec.get("ant")),
         }
         if not uk and not en:
             warnings.append(f"рядок {n}: «{lemma}» — немає жодного перекладу")
@@ -219,6 +278,8 @@ def build():
             old = seen[key]
             old["u"] += [x for x in uk if x not in old["u"]]
             old["e"] += [x for x in en if x not in old["e"]]
+            old["_sy"] += [x for x in ent["_sy"] if x not in old["_sy"]]
+            old["_an"] += [x for x in ent["_an"] if x not in old["_an"]]
             warnings.append(f"рядок {n}: «{lemma}» уже є — переклади об'єднано")
             continue
         seen[key] = ent
@@ -230,6 +291,8 @@ def build():
         base = re.sub(r"[^a-z0-9]+", "-", e["l"].lower().split(";")[0]).strip("-") or "x"
         used[base] = used.get(base, 0) + 1
         e["s"] = base if used[base] == 1 else f"{base}-{used[base]}"
+
+    resolve_links(entries, warnings)
 
     data = {
         "built": datetime.date.today().isoformat(),

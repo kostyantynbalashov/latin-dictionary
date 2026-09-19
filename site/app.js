@@ -39,6 +39,8 @@
       const bases = cp.length > 1 && cp.every((p) => p.trim().endsWith('-')) ? cp : [cp[0]]; // префікси: ante-, prae-
       for (const base of bases) for (const v of expandOpt(base.trim())) push(v.replace(/\s*\([^)]*\)/g, ''));
     }
+    // пошук і за синонімами
+    for (const sy of (e.sy || [])) for (const v of expandOpt(sy.l.split(',')[0].trim())) push(v.replace(/\s*\([^)]*\)/g, ''));
     // однина / варіант у дужках: aspersiones (aspersio, onis, f.) -> aspersio
     for (const m of e.g.matchAll(/\(([^)]*)\)/g)) {
       const first = m[1].split(',')[0].trim();
@@ -208,6 +210,14 @@
         h('ul', { class: 'list' }, rest.map(row))) : null);
   }
 
+  function linkBlock(title, list, mode) {
+    if (!list || !list.length) return null;
+    return h('section', null, h('h2', { text: title }),
+      h('ul', { class: 'trs' }, list.map((x) => h('li', null,
+        x.s ? h('a', { lang: 'la', href: hash(mode, '', '', x.s) }, x.l, x.g ? h('span', { class: 'gram', lang: 'la', text: x.g }) : null)
+            : h('span', { lang: 'la', text: x.l })))));
+  }
+
   function viewEntry(mode, slug) {
     const e = BY_SLUG.get(slug), cfg = MODES[mode];
     if (!e || cfg.kind !== 'lat') return h('div', { class: 'empty' }, h('p', { text: 'Такого слова немає.' }));
@@ -228,6 +238,8 @@
           ? h('ul', { class: 'trs' }, items.map((t) =>
               h('li', null, h('a', { lang, href: hash(cfg.rev, plain(t)), text: t }))))
           : h('p', { class: 'note', text: 'Перекладу ще немає.' })),
+      linkBlock('Синоніми', e.sy, mode),
+      linkBlock('Антоніми', e.an, mode),
       isUk && e.n ? h('section', null, h('h2', { text: 'Примітка' }), h('p', { class: 'note', text: e.n })) : null,
       isUk && e.x.length ? h('section', null, h('h2', { text: 'Приклади' }),
         h('ul', { class: 'exs' }, e.x.map((x) =>
