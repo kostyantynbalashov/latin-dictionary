@@ -120,7 +120,7 @@
     const [path, qs = ''] = raw.split('?');
     const [m, slug = ''] = path.split('/');
     const p = new URLSearchParams(qs);
-    return { mode: MODES[m] ? m : 'lu', slug: decodeURIComponent(slug), q: p.get('q') || '', t: p.get('t') || '' };
+    return { about: m === 'about', mode: MODES[m] ? m : 'lu', slug: decodeURIComponent(slug), q: p.get('q') || '', t: p.get('t') || '' };
   }
   const fmt = (n) => n.toLocaleString('uk-UA');
   const lemmaEl = (e, cls = 'lem') => h('span', { class: cls, lang: 'la', text: e.l });
@@ -129,9 +129,10 @@
   let last = { mode: 'lu', q: '', t: '' }; // останній пошук — для кнопки «назад»
 
   /* ---------- екрани ---------- */
-  function drawModes(mode) {
+  function drawModes(mode, about) {
     $('#modes').replaceChildren(...ORDER.map((m) =>
-      h('a', { href: `#/${m}`, 'aria-current': m === mode ? 'page' : null, text: MODES[m].label })));
+      h('a', { href: `#/${m}`, 'aria-current': !about && m === mode ? 'page' : null, text: MODES[m].label })),
+      h('a', { class: 'about-tab', href: '#/about', 'aria-current': about ? 'page' : null, text: 'Про словник' }));
   }
 
   function emptyNoEnglish() {
@@ -215,12 +216,42 @@
         h('ul', { class: 'list' }, rest.map(row))) : null);
   }
 
+  function srcLine(e) {
+    const by = new Map((D.sources || []).map((x) => [x.n, x]));
+    const list = (e.r || []).map((c) => by.get(c)).filter(Boolean);
+    if (!list.length) return null;
+    return h('p', { class: 'srcline' }, 'Джерело: ',
+      list.flatMap((x, i) => [i ? '; ' : null, h('a', { href: '#/about', text: `[${x.n}] ${x.t}` })]));
+  }
+
   function linkBlock(title, list, mode) {
     if (!list || !list.length) return null;
     return h('section', null, h('h2', { text: title }),
       h('ul', { class: 'trs' }, list.map((x) => h('li', null,
         x.s ? h('a', { lang: 'la', href: hash(mode, '', '', x.s) }, x.l, x.g ? h('span', { class: 'gram', lang: 'la', text: x.g }) : null)
             : h('span', { lang: 'la', text: x.l })))));
+  }
+
+  function viewAbout() {
+    document.title = 'Про словник — Латинський словник';
+    status.textContent = ''; filters.replaceChildren();
+    const srcs = D.sources || [];
+    return h('article', { class: 'about' },
+      h('h1', { text: 'Про словник' }),
+      h('p', { class: 'note', text: 'Латинсько-українсько-англійський словник медичної термінології.' }),
+      h('section', null,
+        h('p', { class: 'credit', text: 'Розробка К. Балашова і Л. Шевченко.' }),
+        h('p', { class: 'sc', text: 'Технічна реалізація за участі Claude (Anthropic).' })),
+      h('section', null, h('h2', { text: 'Джерельна база' }),
+        srcs.length
+          ? h('ol', { class: 'srcs' }, srcs.map((x) => h('li', { id: 'src-' + x.n },
+              h('span', { class: 'sn', text: x.n }),
+              h('div', null,
+                h('p', { class: 'st', text: x.t }),
+                x.c ? h('p', { class: 'sc', text: x.c }) : null,
+                x.u ? h('p', { class: 'sc' }, h('a', { href: x.u, rel: 'noopener', text: x.u })) : null,
+                h('p', { class: 'sk', text: `Гасел із цього джерела: ${fmt(x.k)}` })))))
+          : h('p', { class: 'note', text: 'Джерела ще не додано.' })));
   }
 
   function viewEntry(mode, slug) {
@@ -245,6 +276,7 @@
           : h('p', { class: 'note', text: 'Перекладу ще немає.' })),
       linkBlock('Синоніми', e.sy, mode),
       linkBlock('Антоніми', e.an, mode),
+      srcLine(e),
       isUk && e.n ? h('section', null, h('h2', { text: 'Примітка' }), h('p', { class: 'note', text: e.n })) : null,
       isUk && e.x.length ? h('section', null, h('h2', { text: 'Приклади' }),
         h('ul', { class: 'exs' }, e.x.map((x) =>
@@ -255,7 +287,9 @@
   function render() {
     const r = parse();
     document.title = 'Латинський словник';
-    drawModes(r.mode);
+    drawModes(r.mode, r.about);
+    $('#searchform').hidden = r.about;
+    if (r.about) { filters.replaceChildren(); view.replaceChildren(viewAbout()); return; }
     input.placeholder = MODES[r.mode].ph;
     const shown = r.slug ? last.q : r.q;
     if (document.activeElement !== input || input.value !== shown) input.value = shown;

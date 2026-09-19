@@ -19,6 +19,7 @@ ROOT = pathlib.Path(__file__).resolve().parent
 XLSX = ROOT / "dictionary.xlsx"
 OUT = ROOT / "site" / "data.js"
 SHEET = "Словник"
+SRC_SHEET = "Джерела"
 
 # Назви колонок в Excel -> внутрішні поля
 HEADERS = {
@@ -31,6 +32,7 @@ HEADERS = {
     "приклади": "ex",
     "синоніми": "syn",
     "антоніми": "ant",
+    "джерело": "src",
 }
 
 # Кириличні літери, візуально ідентичні латинським (типова помилка при наборі)
@@ -242,6 +244,28 @@ def read_rows():
         yield rec
 
 
+def read_sources():
+    """Аркуш «Джерела»: № | Джерело | Внесок | Посилання. Необов'язковий."""
+    wb = load_workbook(XLSX, read_only=True, data_only=True)
+    if SRC_SHEET not in wb.sheetnames:
+        return []
+    rows = wb[SRC_SHEET].iter_rows(values_only=True)
+    head = [clean_ws(c).lower() for c in next(rows)]
+    def col(name):
+        return head.index(name) if name in head else None
+    ci = {k: col(k) for k in ("№", "джерело", "внесок", "посилання")}
+    out = []
+    for r in rows:
+        get = lambda k: clean_ws(r[ci[k]]) if ci[k] is not None and ci[k] < len(r) else ""
+        code = get("№")
+        if code.endswith(".0"):
+            code = code[:-2]
+        if not code or not get("джерело"):
+            continue
+        out.append({"n": code, "t": get("джерело"), "c": get("внесок"), "u": get("посилання")})
+    return out
+
+
 def parse_examples(cell):
     ex = []
     for line in clean_ws(cell).split("\n"):
@@ -271,6 +295,14 @@ def build():
             "n": clean_ws(rec.get("note")), "x": parse_examples(rec.get("ex")),
             "_sy": parse_links(rec.get("syn")), "_an": parse_links(rec.get("ant")),
         }
+        codes = []
+        for c in split_top(clean_ws(rec.get("src")), ";"):
+            c = c.strip()
+            c = c[:-2] if c.endswith(".0") else c
+            if c and c not in codes:
+                codes.append(c)
+        if codes:
+            ent["r"] = codes
         if not uk and not en:
             warnings.append(f"рядок {n}: «{lemma}» — немає жодного перекладу")
         key = (lemma, gram)
@@ -278,6 +310,7 @@ def build():
             old = seen[key]
             old["u"] += [x for x in uk if x not in old["u"]]
             old["e"] += [x for x in en if x not in old["e"]]
+            old["r"] = old.get("r", []) + [x for x in ent.get("r", []) if x not in old.get("r", [])]
             old["_sy"] += [x for x in ent["_sy"] if x not in old["_sy"]]
             old["_an"] += [x for x in ent["_an"] if x not in old["_an"]]
             warnings.append(f"рядок {n}: «{lemma}» уже є — переклади об'єднано")
@@ -294,9 +327,21 @@ def build():
 
     resolve_links(entries, warnings)
 
+    sources = read_sources()
+    known = {x["n"] for x in sources}
+    if len({x["n"] for x in sources}) != len(sources):
+        warnings.append("аркуш «Джерела»: номери джерел повторюються")
+    for e in entries:
+        for c in e.get("r", []):
+            if c not in known:
+                warnings.append(f"«{e['l']}»: джерело «{c}» не описане на аркуші «Джерела»")
+    for x in sources:
+        x["k"] = sum(1 for e in entries if x["n"] in e.get("r", []))
+
     data = {
         "built": datetime.date.today().isoformat(),
         "entries": entries,
+        "sources": sources,
     }
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(
@@ -304,7 +349,7 @@ def build():
         encoding="utf-8",
     )
     en_count = sum(1 for e in entries if e["e"])
-    print(f"Готово: {len(entries)} гасел, з англійським перекладом — {en_count}.")
+    print(f"Готово: {len(entries)} гасел, з англійським перекладом — {en_count}, джерел — {len(sources)}.")
     for w in warnings:
         print("Увага:", w)
 
