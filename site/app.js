@@ -261,25 +261,24 @@
     document.title = `${e.l} — Латинський словник`;
     status.textContent = ''; filters.replaceChildren();
     const backTo = last.q ? hash(last.mode, last.q, last.t) : hash(mode);
-    const items = e[cfg.field];
-    const lang = cfg.field === 'e' ? 'en' : 'uk';
-    const isUk = cfg.field === 'u';
+    // обидва переклади на одній сторінці; блок є лише якщо він заповнений; активний режим іде першим
+    const LANGS = [['u', 'Українською', 'uk', 'ul'], ['e', 'Англійською', 'en', 'el']];
+    if (cfg.field === 'e') LANGS.reverse();
+    const blocks = LANGS.filter(([f]) => e[f].length).map(([f, title, lang, rev]) =>
+      h('section', null, h('h2', { text: title }),
+        h('ul', { class: 'trs' }, e[f].map((t) =>
+          h('li', null, h('a', { lang, href: hash(rev, plain(t)), text: t }))))));
     return h('article', { class: 'entry' },
       h('a', { class: 'back', href: backTo, text: last.q ? `← Результати «${last.q}»` : '← До пошуку' }),
       h('h1', { lang: 'la', text: e.l }),
       e.g ? h('p', { class: 'egram', lang: 'la', text: e.g }) : null,
       h('p', { class: 'etype', text: e.t }),
-      h('section', null,
-        h('h2', { text: isUk ? 'Українською' : 'Англійською' }),
-        items.length
-          ? h('ul', { class: 'trs' }, items.map((t) =>
-              h('li', null, h('a', { lang, href: hash(cfg.rev, plain(t)), text: t }))))
-          : h('p', { class: 'note', text: 'Перекладу ще немає.' })),
+      ...(blocks.length ? blocks : [h('section', null, h('p', { class: 'note', text: 'Перекладу ще немає.' }))]),
       linkBlock('Синоніми', e.sy, mode),
       linkBlock('Антоніми', e.an, mode),
       srcLine(e),
-      isUk && e.n ? h('section', null, h('h2', { text: 'Примітка' }), h('p', { class: 'note', text: e.n })) : null,
-      isUk && e.x.length ? h('section', null, h('h2', { text: 'Приклади' }),
+      e.n ? h('section', null, h('h2', { text: 'Примітка' }), h('p', { class: 'note', text: e.n })) : null,
+      e.x.length ? h('section', null, h('h2', { text: 'Приклади' }),
         h('ul', { class: 'exs' }, e.x.map((x) =>
           h('li', null, h('span', { class: 't', lang: 'la', text: x.t }), x.s ? h('span', { class: 's', text: x.s }) : null)))) : null);
   }
