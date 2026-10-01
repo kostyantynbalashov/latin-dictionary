@@ -11,6 +11,7 @@ import datetime
 import json
 import pathlib
 import re
+import unicodedata
 import sys
 
 from openpyxl import load_workbook
@@ -321,7 +322,8 @@ def build():
     # стабільні адреси сторінок: із самої леми
     used = {}
     for e in entries:
-        base = re.sub(r"[^a-z0-9]+", "-", e["l"].lower().split(";")[0]).strip("-") or "x"
+        plain = re.sub(r"[\u0300-\u036f]", "", unicodedata.normalize("NFD", e["l"]))  # ā, ĭ, ë -> a, i, e
+        base = re.sub(r"[^a-z0-9]+", "-", plain.lower().split(";")[0]).strip("-") or "x"
         used[base] = used.get(base, 0) + 1
         e["s"] = base if used[base] == 1 else f"{base}-{used[base]}"
 
